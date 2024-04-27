@@ -83,7 +83,8 @@ def respond(chat_history):
         else:
             response = ollama_rag.get_response(chat_history[-1][0])
         chat_history[-1] = (chat_history[-1][0], response)
-        google_tts.speak(response)
+        if (response is not None) and (len(response) > 0):
+            google_tts.speak(response)
     return gr.MultimodalTextbox(value=None, interactive=False), chat_history
 
 def voice_chat():

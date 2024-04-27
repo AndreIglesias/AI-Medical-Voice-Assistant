@@ -4,6 +4,8 @@ import chromadb
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage, ToolMessage
 # Langchain imports
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
@@ -18,21 +20,65 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain_openai.embeddings import OpenAIEmbeddings
 # Loaders
 from langchain_community.document_loaders import PyPDFLoader, WebBaseLoader
+import time
+
+# ==================================================================================================
+
+@tool
+def score_child_pugh(ascite, bilirubin, albumin, inr, encephalopathy):
+    """
+    Calculates the Child-Pugh score based on ascites, bilirubin, albumin, INR, and encephalopathy.
+    
+    Args:
+        ascite (str): Severity of ascites ("None", "Mild", or "Severe").
+        bilirubin (float): Bilirubin level in mg/dL.
+        albumin (float): Albumin level in g/dL.
+        inr (float): International Normalized Ratio.
+        encephalopathy (str): Severity of encephalopathy ("None", "Grade 1-2", "Grade 3-4").
+
+    Returns:
+        dict: A dictionary with the total score and Child-Pugh class ("A", "B", or "C").
+    """
+    # Assign points based on the levels of each parameter
+    ascite_score = 1 if ascite == "None" else 2 if ascite == "Mild" else 3
+    bilirubin_score = 1 if bilirubin < 2 else 2 if bilirubin < 3 else 3
+    albumin_score = 1 if albumin > 3.5 else 2 if albumin > 2.8 else 3
+    inr_score = 1 if inr < 1.7 else 2 if inr < 2.3 else 3
+    encephalopathy_score = 1 if encephalopathy == "None" else 2 if encephalopathy == "Grade 1-2" else 3
+
+    # Calculate the total score
+    total_score = ascite_score + bilirubin_score + albumin_score + inr_score + encephalopathy_score
+
+    # Determine the Child-Pugh class based on the total score
+    if total_score <= 6:
+        child_pugh_class = "A"
+    elif total_score <= 9:
+        child_pugh_class = "B"
+    else:
+        child_pugh_class = "C"
+
+    console.print(f"Child-Pugh Score: {total_score}, Class: {child_pugh_class}")
+
+    return {"score": total_score, "class": child_pugh_class}
 
 # ==================================================================================================
 
 # Definition of the model and embeddings
 if ollama_model.startswith("gpt"):
     print("Using OpenAI model")
-    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model=ollama_model)
+    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model=ollama_model, temperature=0.2)
     embeddings = OpenAIEmbeddings()
 else:
     print("Using Ollama model")
     model = Ollama(model=ollama_model)
     embeddings = OllamaEmbeddings(model=ollama_model)
 
+model_with_tools = model.bind_tools([score_child_pugh])
+
 # Definition of the output parser
 parser = StrOutputParser()
+
+conversation_memory = ConversationBufferMemory(ai_prefix="Assistant IA: ", user_prefix="Utilisateur: ")
 
 # ==================================================================================================
 
@@ -178,25 +224,40 @@ def process_pdf(pdf_path, question):
     return response
 
 
-# def score_child_pugh(ascite, bilirubin, albumin, inr, encephalopathy):
-
-
 def get_response(input_text):
-    # Definition of the prompt
-    prompt = PromptTemplate(input_variables=["history", "input"], template=template)
-    
-    # Definition of the conversation chain
-    chain = ConversationChain(
-        prompt=prompt,
-        verbose=False,
-        memory=ConversationBufferMemory(ai_prefix="Assistant IA: ", user_prefix="Utilisateur: "),
-        llm=model,
-    )
+    # messages = [HumanMessage(input_text)]
+    ai_msg = model_with_tools.invoke(input_text)
+    # messages.append(ai_msg)
+    print(f"-----ai_msg: {ai_msg} >>>{ai_msg.tool_calls}<<<")
 
-    console.print(f"[cyan]User: {input_text}")
-    response = chain.predict(input=input_text)
-    console.print(f"[cyan]Assistant IA: {response}")
-    if response.startswith("Assistant IA: "):
-        response = response[len("Assistant IA: "):].strip()
-    return response
+    if ai_msg.tool_calls != []:
+        scp_results = []
+        for tool_call in ai_msg.tool_calls:
+            selected_tool = {"score_child_pugh": score_child_pugh}[tool_call["name"].lower()]
+            print(*tool_call["args"].values())
+            scp_results.append(selected_tool.invoke(tool_call["args"]))
+            print("scp_results", scp_results)
+        return f"Le score de Child-Pugh est de {scp_results[0]['score']} class {scp_results[0]['class']}"
+    else:
+        return ai_msg.content
+        # # Definition of the prompt
+        # prompt = PromptTemplate(input_variables=["history", "input"], template=template)
+        
+        # # Definition of the conversation chain
+        # chain = ConversationChain(
+        #     prompt=prompt,
+        #     verbose=False,
+        #     memory=conversation_memory,
+        #     llm=model_with_tools,
+        # )
+
+        # console.print(f"[cyan]User: {input_text}")
+        # response = ""
+        # if response == "":
+        #     time.sleep(1)
+        #     return get_response(input_text)
+        # console.print(f"[cyan]Assistant IA: {response}")
+        # if response.startswith("Assistant IA: "):
+        #     response = response[len("Assistant IA: "):].strip()
+        # return response
 
