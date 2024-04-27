@@ -89,7 +89,6 @@ def respond(chat_history):
 def voice_chat():
     with gr.Blocks() as vchat:
         mic = gr.Microphone(label="Record Audio")
-        text = gr.Textbox(label="Speech to Text | Whisper")
 
         # Chatbot Interface
         chatbot = gr.Chatbot()
@@ -106,12 +105,6 @@ def voice_chat():
         bot_msg.then(lambda: gr.MultimodalTextbox(interactive=True), None, [msg])
         mic.change(transcribe, [mic, chatbot], [msg, chatbot])
 
-        @gr.on(inputs=[mic], outputs=[text])
-        def get_text(audio):
-            if (audio is None) or (len(audio) == 0):
-                return None
-            audio = convert_audio(audio)
-            return whisper_stt.transcribe(audio)["text"]
     return vchat
 
 def url_tab():
