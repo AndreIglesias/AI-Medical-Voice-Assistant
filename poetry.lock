@@ -1314,13 +1314,13 @@ grpc = ["grpcio (>=1.44.0,<2.0.0.dev0)"]
 
 [[package]]
 name = "gradio"
-version = "4.28.0"
+version = "4.28.3"
 description = "Python library for easily interacting with trained machine learning models"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "gradio-4.28.0-py3-none-any.whl", hash = "sha256:fd347320f9a7d3a3fdd681a47c8f4f4c564639b5c532d94093d6c2c34d5958d8"},
-    {file = "gradio-4.28.0.tar.gz", hash = "sha256:020c2028b2a3e0f5f3174a5ce07c25437429d15bde4ba8d520ba4dd4fb45038d"},
+    {file = "gradio-4.28.3-py3-none-any.whl", hash = "sha256:1aa36f9858521d63dd0ca03575776f768c9ae2862615f6783c1fddd1118c8999"},
+    {file = "gradio-4.28.3.tar.gz", hash = "sha256:bb145c13a928c2343b71d0deef3f43f6caf4fe3188dcaac63a8121a7e3f2a8dd"},
 ]
 
 [package.dependencies]
@@ -2111,17 +2111,17 @@ extended-testing = ["jinja2 (>=3,<4)"]
 
 [[package]]
 name = "langchain-openai"
-version = "0.1.3"
+version = "0.1.4"
 description = "An integration package connecting OpenAI and LangChain"
 optional = false
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_openai-0.1.3-py3-none-any.whl", hash = "sha256:fa1f27815649291447e5370cb08e2f5a84e5c7c6121d0c055a6e296bd16d1e47"},
-    {file = "langchain_openai-0.1.3.tar.gz", hash = "sha256:7f6e377d6bf88d6c2b1969fe5eecc1326271757512739e2f17c855cd7af53345"},
+    {file = "langchain_openai-0.1.4-py3-none-any.whl", hash = "sha256:a349ada8724921e380aab03ee312568f5ca99adbc806f6878d79ff9cd1d6d353"},
+    {file = "langchain_openai-0.1.4.tar.gz", hash = "sha256:1a3220464c270d73ea3987010617789adc2099d4d4740b15c7734ab07e1f054b"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.1.42,<0.2.0"
+langchain-core = ">=0.1.46,<0.2.0"
 openai = ">=1.10.0,<2.0.0"
 tiktoken = ">=0.5.2,<1"
 
