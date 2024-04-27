@@ -23,9 +23,11 @@ from langchain_community.document_loaders import PyPDFLoader, WebBaseLoader
 
 # Definition of the model and embeddings
 if ollama_model.startswith("gpt"):
+    print("Using OpenAI model")
     model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model=ollama_model)
     embeddings = OpenAIEmbeddings()
 else:
+    print("Using Ollama model")
     model = Ollama(model=ollama_model)
     embeddings = OllamaEmbeddings(model=ollama_model)
 
@@ -176,6 +178,9 @@ def process_pdf(pdf_path, question):
     return response
 
 
+# def score_child_pugh(ascite, bilirubin, albumin, inr, encephalopathy):
+
+
 def get_response(input_text):
     # Definition of the prompt
     prompt = PromptTemplate(input_variables=["history", "input"], template=template)
@@ -185,7 +190,7 @@ def get_response(input_text):
         prompt=prompt,
         verbose=False,
         memory=ConversationBufferMemory(ai_prefix="Assistant IA: ", user_prefix="Utilisateur: "),
-        llm=Ollama(model=ollama_model),
+        llm=model,
     )
 
     console.print(f"[cyan]User: {input_text}")

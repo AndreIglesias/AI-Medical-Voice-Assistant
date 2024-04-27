@@ -17,7 +17,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Ollama RAG
-ollama_model = "medllama2"
+ollama_model = "gpt-4-turbo"
 
 template =  """
 Tu es un assistant IA serviable et amical. Tu es poli, respectueux, et tu vises à donner des réponses
