@@ -1,4 +1,4 @@
-from . import ollama_model, console, OPENAI_API_KEY, template, context_template
+from . import ollama_model, console, OPENAI_API_KEY, MARKDOWN_CHILD_PUGH_TABLE, template, context_template
 from operator import itemgetter
 import chromadb
 from langchain_core.output_parsers import StrOutputParser
@@ -30,21 +30,21 @@ def score_child_pugh(ascite, bilirubin, albumin, inr, encephalopathy):
     Calculates the Child-Pugh score based on ascites, bilirubin, albumin, INR, and encephalopathy.
     
     Args:
-        ascite (str): Severity of ascites ("None", "Mild", or "Severe").
+        ascite (str): Severity of ascites ("Absente", "Modérée", or "Severe").
         bilirubin (float): Bilirubin level in mg/dL.
         albumin (float): Albumin level in g/dL.
         inr (float): International Normalized Ratio.
-        encephalopathy (str): Severity of encephalopathy ("None", "Grade 1-2", "Grade 3-4").
+        encephalopathy (str): Severity of encephalopathy ("Absente", "Grade 1-2", "Grade 3-4").
 
     Returns:
         dict: A dictionary with the total score and Child-Pugh class ("A", "B", or "C").
     """
     # Assign points based on the levels of each parameter
-    ascite_score = 1 if ascite == "None" else 2 if ascite == "Mild" else 3
-    bilirubin_score = 1 if bilirubin < 2 else 2 if bilirubin < 3 else 3
-    albumin_score = 1 if albumin > 3.5 else 2 if albumin > 2.8 else 3
+    ascite_score = 1 if ascite == "Absente" else 2 if ascite == "Modérée" else 3
+    bilirubin_score = 1 if bilirubin < 35 else 2 if bilirubin < 50 else 3
+    albumin_score = 1 if albumin > 35 else 2 if albumin > 28 else 3
     inr_score = 1 if inr < 1.7 else 2 if inr < 2.3 else 3
-    encephalopathy_score = 1 if encephalopathy == "None" else 2 if encephalopathy == "Grade 1-2" else 3
+    encephalopathy_score = 1 if encephalopathy == "Absente" else 2 if (encephalopathy == "Légère" or encephalopathy ==  "Modérée") else 3
 
     # Calculate the total score
     total_score = ascite_score + bilirubin_score + albumin_score + inr_score + encephalopathy_score
@@ -59,7 +59,21 @@ def score_child_pugh(ascite, bilirubin, albumin, inr, encephalopathy):
 
     console.print(f"Child-Pugh Score: {total_score}, Class: {child_pugh_class}")
 
-    return {"score": total_score, "class": child_pugh_class}
+    response = f"{MARKDOWN_CHILD_PUGH_TABLE}\n## Variables\n"
+    response += f"""
+| Variable | Value |
+| --- | --- |
+| Ascite | {ascite} |
+| Bilirubine | {bilirubin} mg/dL |
+| Albumine | {albumin} g/dL |
+| INR | {inr} |
+| Encéphalopathie | {encephalopathy} |
+"""
+    response += f"\n## Résultat\n"
+    response += f"Le score total de Child-Pugh est de {total_score}, class {child_pugh_class}.\n"
+    return response
+
+    # return {"score": total_score, "class": child_pugh_class}
 
 # ==================================================================================================
 
@@ -237,7 +251,7 @@ def get_response(input_text):
             print(*tool_call["args"].values())
             scp_results.append(selected_tool.invoke(tool_call["args"]))
             print("scp_results", scp_results)
-        return f"Le score de Child-Pugh est de {scp_results[0]['score']} class {scp_results[0]['class']}"
+        return f"{scp_results[0]}"
     else:
         return ai_msg.content
         # # Definition of the prompt

@@ -83,13 +83,20 @@ def respond(chat_history):
         else:
             response = ollama_rag.get_response(chat_history[-1][0])
         chat_history[-1] = (chat_history[-1][0], response)
-        if (response is not None) and (len(response) > 0):
-            google_tts.speak(response)
+        #if (response is not None) and (len(response) > 0):
+            #google_tts.speak(response)
     return gr.MultimodalTextbox(value=None, interactive=False), chat_history
+
+def speak_last_bot_response(chat_history):
+    if len(chat_history) == 0:
+        return gr.MultimodalTextbox(interactive=True), chat_history
+    if chat_history[-1][1] is not None:
+        google_tts.speak(chat_history[-1][1])
+    return gr.MultimodalTextbox(interactive=True), chat_history
 
 def voice_chat():
     with gr.Blocks() as vchat:
-        mic = gr.Microphone(label="Record Audio")
+        mic = gr.Audio(label="Record Audio", sources=["microphone"])
 
         # Chatbot Interface
         chatbot = gr.Chatbot()
@@ -102,7 +109,8 @@ def voice_chat():
         clear = gr.ClearButton([msg, chatbot])
 
         chat_msg = msg.submit(submit, [msg, chatbot], [msg, chatbot])
-        bot_msg = chat_msg.then(respond, [chatbot], [msg, chatbot], api_name="respond")
+        bot_msg = chatbot.change(respond, [chatbot], [msg, chatbot], api_name="respond")
+        bot_msg.then(speak_last_bot_response, [chatbot], [msg, chatbot])
         bot_msg.then(lambda: gr.MultimodalTextbox(interactive=True), None, [msg])
         mic.change(transcribe, [mic, chatbot], [msg, chatbot])
 

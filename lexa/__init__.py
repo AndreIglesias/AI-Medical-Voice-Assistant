@@ -12,6 +12,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MARKDOWN_CHILD_PUGH_TABLE = """
+## Child-Pugh Score
+| variable | 1 point | 2 points | 3 points |
+| --- | --- | --- | --- |
+| Ascite | Absente | Modérée | Tendue ou réfractaire |
+| Bilirubine (mg/dL) | < 35 | 35-50 | > 50 |
+| Albumine (g/dL) | > 35 | 28-35 | < 28 |
+| INR | < 1.7 | 1.7-2.3 | > 2.3 |
+| Encéphalopathie | Absente | Légère à Modérée (Grade 1-2) | Sèvère (Grade 3-4) |
+
+Le pronostic de la cirrhose est évalué en fonction du score total de Child-Pugh :
+- Classe A : 5-6 points : survie à 1 an de 100%
+- Classe B : 7-9 points : survie à 1 an de 80%
+- Classe C : 10-15 points : survie à 1 an de 45%
+
+"""
+
 # ==================================================================================================
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

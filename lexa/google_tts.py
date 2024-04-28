@@ -9,6 +9,12 @@ def speak(text):
     """
     Generates text-to-speech from the given text and plays it using sounddevice.
     """
+    keyword = "## Résultat"
+    index = text.find(keyword) + len(keyword)
+    if index != -1:
+        text = text[index:]
+    
+    print(text)
     tts = gTTS(text=text, lang=gtts_lang, slow=False)
 
     # Save to a temporary audio file
