@@ -32,7 +32,7 @@ DigH@cktion is the 4th edition of the innovation program dedicated to diseases a
 
 > This program is supported by 20 scientific societies, national bodies, working groups, and associations in the ecosystem of digestive system diseases and cancers. The goal of DigH@cktion is to encourage the creation of innovative digital solutions that benefit patients and healthcare professionals.
 
-## Achievements
+## Achievements 🏆
 
 We are proud to announce that our project won **two prizes** at the DigH@cktion Hackathon:
 
