@@ -8,6 +8,7 @@
   <img alt="Static Badge" src="https://img.shields.io/badge/medllama2-%20llm-orange?style=for-the-badge&logo=meta">
   <img alt="Static Badge" src="https://img.shields.io/badge/Bark-%20TTS-blue?style=for-the-badge">
   <img alt="Static Badge" src="https://img.shields.io/badge/gTTS-%20TTS-blue?style=for-the-badge&logo=google">
+  <img alt="Static Badge" src="https://img.shields.io/badge/License-%20MIT-black?style=for-the-badge">
 </p>
 
 Welcome to the GitHub repository for the [DigH@cktion](https://www.dighacktion.com/) Hackathon project! 
