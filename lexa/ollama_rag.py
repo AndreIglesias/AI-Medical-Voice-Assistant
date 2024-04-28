@@ -254,24 +254,3 @@ def get_response(input_text):
         return f"{scp_results[0]}"
     else:
         return ai_msg.content
-        # # Definition of the prompt
-        # prompt = PromptTemplate(input_variables=["history", "input"], template=template)
-        
-        # # Definition of the conversation chain
-        # chain = ConversationChain(
-        #     prompt=prompt,
-        #     verbose=False,
-        #     memory=conversation_memory,
-        #     llm=model_with_tools,
-        # )
-
-        # console.print(f"[cyan]User: {input_text}")
-        # response = ""
-        # if response == "":
-        #     time.sleep(1)
-        #     return get_response(input_text)
-        # console.print(f"[cyan]Assistant IA: {response}")
-        # if response.startswith("Assistant IA: "):
-        #     response = response[len("Assistant IA: "):].strip()
-        # return response
-
