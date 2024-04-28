@@ -8,6 +8,8 @@
   <img alt="Static Badge" src="https://img.shields.io/badge/medllama2-%20llm-orange?style=for-the-badge&logo=meta">
   <img alt="Static Badge" src="https://img.shields.io/badge/Bark-%20TTS-blue?style=for-the-badge">
   <img alt="Static Badge" src="https://img.shields.io/badge/gTTS-%20TTS-blue?style=for-the-badge&logo=google">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Prix-%20Du_publique-gold?style=for-the-badge">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Prix-%20Wilco-gold?style=for-the-badge">
   <img alt="Static Badge" src="https://img.shields.io/badge/License-%20MIT-black?style=for-the-badge">
 </p>
 
@@ -35,7 +37,7 @@ DigH@cktion is the 4th edition of the innovation program dedicated to diseases a
 We are proud to announce that our project won **two prizes** at the DigH@cktion Hackathon:
 
 1. **Prix du Public**: Recognizing the project as the best solution by public vote.
-2. **Prix Wilco**: Awarded by WILCO, indicating high startup potential and innovation.
+3. **Prix Wilco**: Awarded by WILCO, indicating high startup potential and innovation.
 
 These awards demonstrate our commitment to creating an impactful and innovative solution for the medical field.
 
