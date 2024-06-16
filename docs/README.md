@@ -1,5 +1,5 @@
 <p align="center">
-  <h1>DigH@cktion - Medical Score Assistant</h1>
+  <h1>DigH@cktion - Medical Voice Assistant</h1>
 </p>
 
 
